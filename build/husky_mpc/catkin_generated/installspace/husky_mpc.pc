@@ -1,0 +1,8 @@
+prefix=/home/will/mpc_ws/install
+
+Name: husky_mpc
+Description: Description of husky_mpc
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

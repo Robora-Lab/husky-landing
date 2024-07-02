@@ -1,0 +1,2 @@
+open_nmpc_controller
+-DCATKIN_DEVEL_PREFIX=/home/will/mpc_ws/devel -DCMAKE_INSTALL_PREFIX=/home/will/mpc_ws/install -G Unix Makefiles

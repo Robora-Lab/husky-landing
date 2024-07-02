@@ -1,0 +1,8 @@
+prefix=/home/will/mpc_ws/devel
+
+Name: open_nmpc_controller
+Description: Description of open_nmpc_controller
+Version: 0.0.0
+Cflags: -I/home/will/mpc_ws/devel/include
+Libs: -L${prefix}/lib 
+Requires: roscpp std_msgs message_runtime
