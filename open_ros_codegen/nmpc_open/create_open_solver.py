@@ -11,7 +11,7 @@ NSim = 600
 Q = cs.DM.eye(NX) * [5.0, 5.0, 3.0]
 R = cs.DM.eye(NU) * [0.2, 2]
 QN = cs.DM.eye(NX) * [50.0, 50.0, 30.0]
-
+###  ADD DISTRIBUTED COST HERE
 
 def dynamics_ct(_x, _u):
     return cs.vcat([_u[0] * cs.cos(_x[2]),
