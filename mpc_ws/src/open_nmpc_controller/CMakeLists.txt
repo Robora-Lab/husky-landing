@@ -12,7 +12,6 @@ add_message_files(
   FILES
   OptimizationResult.msg
   OptimizationParameters.msg
-  Status.msg
 )
 
 generate_messages(
@@ -20,7 +19,7 @@ generate_messages(
 )
 
 catkin_package(
-   CATKIN_DEPENDS roscpp std_msgs message_runtime
+   CATKIN_DEPENDS message_runtime
 )
 
 include_directories(

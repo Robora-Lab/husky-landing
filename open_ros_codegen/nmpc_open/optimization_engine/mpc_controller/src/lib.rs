@@ -2,7 +2,7 @@
 // Auto-generated file by OptimizationEngine
 // See https://alphaville.github.io/optimization-engine/
 //
-// Generated at: 2024-06-21 12:51:57.950653
+// Generated at: 2024-07-02 15:22:35.239851
 //
 
 use icasadi_mpc_controller;
