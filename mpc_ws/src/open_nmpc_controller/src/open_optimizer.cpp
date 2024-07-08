@@ -31,32 +31,12 @@ namespace open_nmpc_controller {
  * of this node
  */
 class OptimizationEngineManager {
-/**
- * Private fields and methods
- */
+
 private:
-    /**
-     * Optimization parameters announced on the corresponding
-     * topic (open_nmpc_controller/parameters)
-     */
     open_nmpc_controller::OptimizationParameters params;
-    /**
-     * Object containing the result (solution and solver
-     * statistics), which will be announced on open_nmpc_controller/results
-     */
     open_nmpc_controller::OptimizationResult results;
-    /**
-     * Vector of parameters (provided by the client on
-     * open_nmpc_controller/parameters)
-     */
     double p[MPC_CONTROLLER_NUM_PARAMETERS] = { 0 };
-    /**
-     * Solution vector
-     */
     double u[MPC_CONTROLLER_NUM_DECISION_VARIABLES] = { 0 };
-    /**
-     * Vector of Lagrange multipliers (if any)
-     */
     double *y = NULL;
 
     static const int NX = 3;
@@ -73,13 +53,7 @@ private:
 
     double elapsedSec;
 
-    /**
-     * Workspace variable used by the solver - initialised once
-     */
     mpc_controllerCache* cache;
-    /**
-     * Initial guess for the penalty parameter
-     */
     double init_penalty = ROS_NODE_MPC_CONTROLLER_DEFAULT_INITIAL_PENALTY;
 
     /**
@@ -112,10 +86,10 @@ private:
                 u[i] = params.initial_guess[i];
         }
 
-		if (params.initial_y.size() == MPC_CONTROLLER_N1) {
+	if (params.initial_y.size() == MPC_CONTROLLER_N1) {
             for (size_t i = 0; i < MPC_CONTROLLER_N1; ++i)
                 y[i] = params.initial_y[i];
-		}
+	}
     }
 
     /**
@@ -239,11 +213,12 @@ public:
         }
     }
 
-    void solveAndPublishCmdVel(ros::Publisher& publisher)
+    void solveAndPublishCmdVel(ros::Publisher& publisher, ros::Publisher& hgoal_publisher)
     {
         double current_par [MPC_CONTROLLER_NUM_PARAMETERS] = {0};
         double current_var [MPC_CONTROLLER_NUM_DECISION_VARIABLES] = {0};
         double lin_vel_cmd = 0, ang_vel_cmd = 0;
+        double hgoal_x = 0, hgoal_y = 0;
 
         for (int i=0; i<NX; i++) {
             current_par[i] = current_pos[i];
@@ -278,9 +253,25 @@ public:
             twist.angular.z = ang_vel_cmd;
             publisher.publish(twist);
 
+            hgoal_x = current_var[2];
+            hgoal_y = current_var[3];
+
+            geometry_msgs::PoseStamped hgoal;
+
+            hgoal.pose.position.x = hgoal_x;
+            hgoal.pose.position.y = hgoal_y;
+            hgoal.pose.position.z = 1.5;
+            hgoal.pose.orientation.x = 0;
+            hgoal.pose.orientation.y = 0;
+            hgoal.pose.orientation.z = 0;
+            hgoal.pose.orientation.w = 0;
+
+            hgoal_publisher.publish(hgoal);
+
             ROS_INFO("Goal x: %.1f, y: %.1f, yaw: %.1f", current_ref[0], current_ref[1], current_ref[2]);
             ROS_INFO("Sending (lin_vel, ang_vel): (%f, %f) \n", lin_vel_cmd, ang_vel_cmd);
             //ROS_INFO("Solve time: %f ms. \n", (double)status.solve_time_ns / 1000000.0);
+            ROS_INFO("husky x goal: %f, husky y goal: %f", hgoal_x, hgoal_y);
         }
     }
 
@@ -334,10 +325,10 @@ int main(int argc, char** argv)
 
     ros::Subscriber joySub = nh.subscribe("/joy_teleop/joy", 1, &open_nmpc_controller::OptimizationEngineManager::joyCallback, &mng);
 
-    ros::Subscriber command_trajectory_subscriber = private_nh.subscribe("/goalPose", 1, &open_nmpc_controller::OptimizationEngineManager::goalPoseCallback, &mng);
+    ros::Subscriber command_trajectory_subscriber = private_nh.subscribe("/goalPoseCF", 1, &open_nmpc_controller::OptimizationEngineManager::goalPoseCallback, &mng);
 
     ros::Publisher pub_twist_cmd = nh.advertise<geometry_msgs::Twist>("/husky_velocity_controller/cmd_vel", 1);
-
+    ros::Publisher pub_husky_goal = nh.advertise<geometry_msgs::PoseStamped>("/goalPose",1);
 
     ros::Rate loop_rate(ROS_NODE_MPC_CONTROLLER_RATE);
 
@@ -352,7 +343,7 @@ int main(int argc, char** argv)
             ROS_INFO("Use `roslaunch wavemodel_pkg wavemodel.launch` prior to running");
             ros::shutdown();
         }
-        mng.solveAndPublishCmdVel(pub_twist_cmd);
+        mng.solveAndPublishCmdVel(pub_twist_cmd, pub_husky_goal);
         ros::spinOnce();
         loop_rate.sleep();
     }
