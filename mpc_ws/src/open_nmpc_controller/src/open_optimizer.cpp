@@ -1,9 +1,6 @@
 /**
- * This is an auto-generated file by Optimization Engine (OpEn)
- * OpEn is a free open-source software - see doc.optimization-engine.xyz
- * dually licensed under the MIT and Apache v2 licences.
- *
- * Generated at 2024-06-19 15:28:27.622716.
+ * WORKING COOPERATIVE LANDING + PLATFORM OFFSET!
+ * 2024-07-09
  */
 #include "ros/ros.h"
 #include "open_nmpc_controller/OptimizationResult.h"
@@ -20,6 +17,8 @@
 
 #include "tf/transform_datatypes.h"
 #include "tf/LinearMath/Matrix3x3.h"
+
+#include <cmath>
 
 ros::Time lastCommTime;
 double elapsedTime = 0;
@@ -52,6 +51,10 @@ private:
     int buttonPrev = 0;
 
     double elapsedSec;
+
+    double yaw = 0;
+    const double OFFSET_WIDTH = 0.1;  // NEGATIVE PUTS CF BEHIND HUSKY
+    const double OFFSET_LENGTH = 0;  // NEGATIVE PUTS CF TO RIGHT OF HUSKY
 
     mpc_controllerCache* cache;
     double init_penalty = ROS_NODE_MPC_CONTROLLER_DEFAULT_INITIAL_PENALTY;
@@ -162,9 +165,14 @@ public:
     {
         trackingGoal = true;
 
-        current_ref[0] = msg->pose.position.x;
-        current_ref[1] = msg->pose.position.y;
-        current_ref[2] = msg->pose.orientation.w;  /// THIS IS RADIANS WE ARE BEING SNEAKY
+        double cf_x = msg->pose.position.x;
+        double cf_y = msg->pose.position.y;
+        double offset_x = cf_x - (OFFSET_WIDTH*std::cos(-yaw) + OFFSET_LENGTH*std::sin(-yaw));
+        double offset_y = cf_y - (OFFSET_LENGTH*std::cos(-yaw) - OFFSET_WIDTH*std::sin(-yaw));
+
+        current_ref[0] = offset_x;
+        current_ref[1] = offset_y;
+        current_ref[2] = 0;
     }
 
     void joyCallback(const sensor_msgs::Joy::ConstPtr& msg){
@@ -188,7 +196,7 @@ public:
     }
 
     void poseCallback(const geometry_msgs::PoseStampedConstPtr& msg) {
-        double roll, pitch, yaw;
+        double roll, pitch;
 
         tf::Quaternion quat(msg->pose.orientation.x,
                             msg->pose.orientation.y,
@@ -253,25 +261,29 @@ public:
             twist.angular.z = ang_vel_cmd;
             publisher.publish(twist);
 
-            hgoal_x = current_var[2];
-            hgoal_y = current_var[3];
+            ROS_INFO("Goal x: %.1f, y: %.1f, yaw: %.1f", current_ref[0], current_ref[1], current_ref[2]);
+            ROS_INFO("Sending (lin_vel, ang_vel): (%f, %f) \n", lin_vel_cmd, ang_vel_cmd);
+            //ROS_INFO("Solve time: %f ms. \n", (double)status.solve_time_ns / 1000000.0);
+            ROS_INFO("husky x goal: %f, husky y goal: %f", hgoal_x, hgoal_y);
+        }
+        if (trackingGoal){
+            hgoal_x = current_var[120];
+            hgoal_y = current_var[121];
 
             geometry_msgs::PoseStamped hgoal;
 
-            hgoal.pose.position.x = hgoal_x;
-            hgoal.pose.position.y = hgoal_y;
-            hgoal.pose.position.z = 1.5;
+            double offset_hgoal_x = hgoal_x + (OFFSET_WIDTH*std::cos(-yaw) + OFFSET_LENGTH*std::sin(-yaw));
+            double offset_hgoal_y = hgoal_y + (OFFSET_LENGTH*std::cos(-yaw) - OFFSET_WIDTH*std::sin(-yaw));
+
+            hgoal.pose.position.x = offset_hgoal_x;
+            hgoal.pose.position.y = offset_hgoal_y;
+            hgoal.pose.position.z = 1.3;
             hgoal.pose.orientation.x = 0;
             hgoal.pose.orientation.y = 0;
             hgoal.pose.orientation.z = 0;
             hgoal.pose.orientation.w = 0;
 
             hgoal_publisher.publish(hgoal);
-
-            ROS_INFO("Goal x: %.1f, y: %.1f, yaw: %.1f", current_ref[0], current_ref[1], current_ref[2]);
-            ROS_INFO("Sending (lin_vel, ang_vel): (%f, %f) \n", lin_vel_cmd, ang_vel_cmd);
-            //ROS_INFO("Solve time: %f ms. \n", (double)status.solve_time_ns / 1000000.0);
-            ROS_INFO("husky x goal: %f, husky y goal: %f", hgoal_x, hgoal_y);
         }
     }
 

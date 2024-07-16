@@ -13,7 +13,7 @@ static const uintptr_t MPC_CONTROLLER_N1 = 0;
 
 static const uintptr_t MPC_CONTROLLER_N2 = 0;
 
-static const uintptr_t MPC_CONTROLLER_NUM_DECISION_VARIABLES = 120;
+static const uintptr_t MPC_CONTROLLER_NUM_DECISION_VARIABLES = 123;
 
 static const uintptr_t MPC_CONTROLLER_NUM_PARAMETERS = 6;
 

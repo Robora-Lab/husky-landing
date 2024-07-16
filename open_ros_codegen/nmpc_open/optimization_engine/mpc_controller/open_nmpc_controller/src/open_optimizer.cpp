@@ -3,7 +3,7 @@
  * OpEn is a free open-source software - see doc.optimization-engine.xyz
  * dually licensed under the MIT and Apache v2 licences.
  *
- * Generated at 2024-07-02 15:22:52.861051.
+ * Generated at 2024-07-05 16:08:45.174721.
  */
 #include "ros/ros.h"
 #include "open_nmpc_controller/OptimizationResult.h"

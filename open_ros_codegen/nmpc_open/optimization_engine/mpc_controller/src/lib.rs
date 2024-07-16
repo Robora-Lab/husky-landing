@@ -2,7 +2,7 @@
 // Auto-generated file by OptimizationEngine
 // See https://alphaville.github.io/optimization-engine/
 //
-// Generated at: 2024-07-02 15:22:35.239851
+// Generated at: 2024-07-05 16:08:19.685198
 //
 
 use icasadi_mpc_controller;
@@ -49,7 +49,7 @@ const SUFFICIENT_INFEASIBILITY_DECREASE_COEFFICIENT: f64 = 0.1;
 // ---Public Constants-----------------------------------------------------------------------------------
 
 /// Number of decision variables
-pub const MPC_CONTROLLER_NUM_DECISION_VARIABLES: usize = 120;
+pub const MPC_CONTROLLER_NUM_DECISION_VARIABLES: usize = 123;
 
 /// Number of parameters
 pub const MPC_CONTROLLER_NUM_PARAMETERS: usize = 6;
