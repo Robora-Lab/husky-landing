@@ -82,7 +82,7 @@ Making Changes:
   * Make those changes by doing `$ nano ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/create_open_solver.py`.
   * After you change the MPC parameters, you will need to `$ cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/` then `$ python create_open_solver.py`.
   * `cd ~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/extern_lib` and delete the file `libmpc_controller.a` using the command `rm libmpc_controller`
-  * `cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/open_nmpc_controller/extern_lib` and copy the new `libmpc_controller.a` file to the directory where we just deleted the deprecated version using the command `cp libmpc_controller.a /husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/extern_lib`
+  * `cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/open_nmpc_controller/extern_lib` and copy the new `libmpc_controller.a` file to the directory where we just deleted the deprecated version using the command `cp libmpc_controller.a ~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/extern_lib`
   * Then you MUST compile the C++ node that implements the MPC.
   You can do this with `$ cd ~/husky_crazyflie_landing/mpc_ws` and `$ catkin_make`.
 
@@ -90,7 +90,7 @@ Making Changes:
   You must then run the python file, like before, by doing `$ cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/` then `$ python create_open_solver.py`.
   However, before compiling the C++ node that implements the MPC, you must do a few steps. Read all the way through before starting:
   * First, copy the C++ file "open_optimizer.cpp" in `~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/src` to the directory named "backup" in the home directory.
-  * Next, `$ cd ~/husky_crazyflie_landing/mpc_ws/src` and recursively remove the directory named "open_nmpc_controller". Make sure you saved the C++ file to a location outside of this directory!
-  * Then, `$ cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/optimization_engine/mpc_controller` and copy the directory "open_nmpc_controller" into `~/husky_crazyflie_landing/mpc_ws/src`.
-  * This will have overwritten the C++ file in `~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/src` with code that looks similar but is bad, so you'll need to replace it with the backup you made earlier.
+  * Next, `$ cd ~/husky_crazyflie_landing/mpc_ws/src` and recursively remove the directory named "open_nmpc_controller" using the command `rm -r open_nmpc_controller`. Make sure you saved the C++ file to a location outside of this directory!
+  * Then, `$ cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/optimization_engine/mpc_controller` and copy the directory "open_nmpc_controller" into `~/husky_crazyflie_landing/mpc_ws/src` using the command `cp -r open_nmpc_controller/ ~/husky_crazyflie_landing/mpc_ws/src`
+  * This will have overwritten the C++ file in `~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/src` with code that looks similar but is bad, so you'll need to replace it with the backup you made earlier using the cp command with the name of your backup.
   * Lastly, after doing the python code gen, copying the directory, then replacing the bad code file, you should be ready to `$ cd ~/husky_crazyflie_landing/mpc_ws` and `$ catkin_make` like before.
