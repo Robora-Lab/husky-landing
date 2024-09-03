@@ -78,12 +78,15 @@ Making Changes:
 
   The MPC uses code-gen as specified in this tutorial: https://alphaville.github.io/optimization-engine/docs/example_navigation_ros_codegen#code-generation-for-the-mpc-controller.
 
-  If you wish to change JUST the MPC parameters, such as Q and R matrices, Umin and Umax, you can make those changes by doing `$ nano ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/create_open_solver.py`.
-  After you change the MPC parameters, you will need to `$ cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/` then `$ python create_open_solver.py`.
-  After you run the python file, you MUST compile the C++ node that implements the MPC.
+  If you wish to change JUST the MPC parameters, such as Q and R matrices, Umin and Umax: 
+  * Make those changes by doing `$ nano ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/create_open_solver.py`.
+  * After you change the MPC parameters, you will need to `$ cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/` then `$ python create_open_solver.py`.
+  * `cd ~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/extern_lib` and delete the file `libmpc_controller.a` using the command `rm libmpc_controller`
+  * `cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/open_nmpc_controller/extern_lib` and copy the new `libmpc_controller.a` file to the directory where we just deleted the deprecated version using the command `cp libmpc_controller.a /husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/extern_lib`
+  * Then you MUST compile the C++ node that implements the MPC.
   You can do this with `$ cd ~/husky_crazyflie_landing/mpc_ws` and `$ catkin_make`.
 
-  If you wish to change more about the MPC like the prediction horizon or the vehicle dynamics, you can make those changes by doing `$ nano ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/create_open_solver.py`.
+  If you wish to change more about the MPC like the prediction horizon or the vehicle dynamics you can make those changes by doing `$ nano ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/create_open_solver.py`.
   You must then run the python file, like before, by doing `$ cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/` then `$ python create_open_solver.py`.
   However, before compiling the C++ node that implements the MPC, you must do a few steps. Read all the way through before starting:
   * First, copy the C++ file "open_optimizer.cpp" in `~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/src` to the directory named "backup" in the home directory.
