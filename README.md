@@ -8,6 +8,8 @@ Email: 21wss3@queensu.ca
 
 Emergency Email: willst3wart@gmail.com
 
+Revisons/Additions 09/03/24 JS
+
 Github:
 https://github.com/Robora-Lab/husky_crazyflie_landing
 
