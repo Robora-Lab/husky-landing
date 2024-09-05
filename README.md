@@ -83,7 +83,7 @@ Making Changes:
   If you wish to change JUST the MPC parameters, such as Q and R matrices, Umin and Umax: 
   * Make those changes by doing `$ nano ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/create_open_solver.py`.
   * After you change the MPC parameters, you will need to `$ cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/` then `$ python create_open_solver.py`.
-  * `cd ~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/extern_lib` and delete the file `libmpc_controller.a` using the command `rm libmpc_controller`
+  * `cd ~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/extern_lib` and delete the file `libmpc_controller.a` using the command `rm libmpc_controller.a`
   * `cd ~/husky_crazyflie_landing/open_ros_codegen/nmpc_open/open_nmpc_controller/extern_lib` and copy the new `libmpc_controller.a` file to the directory where we just deleted the deprecated version using the command `cp libmpc_controller.a ~/husky_crazyflie_landing/mpc_ws/src/open_nmpc_controller/extern_lib`
   * Then you MUST compile the C++ node that implements the MPC.
   You can do this with `$ cd ~/husky_crazyflie_landing/mpc_ws` and `$ catkin_make`.
