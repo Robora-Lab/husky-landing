@@ -8,7 +8,7 @@ Email: 21wss3@queensu.ca
 
 Emergency Email: willst3wart@gmail.com
 
-Revisons/Additions 09/03/24 JS
+Revisons/Additions 01/27/25 JS
 
 Github:
 https://github.com/Robora-Lab/husky_crazyflie_landing
@@ -28,7 +28,7 @@ https://docs.clearpathrobotics.com/docs/robots/outdoor_robots/husky/user_manual_
 If you get a yellow light when trying to drive the Husky, check: lockout key, e-stop, and change the battery.
 
 Once laptop is on "Lab" wifi, to ssh into Pi:
-  Shell: `ssh -l will 172.20.42.##`               last two digits (##) change. To see what they are, plug Pi into monitor and keyboard (before booting) and run `$ ip addr show`.
+  Shell: `ssh -l will 172.20.42.##`               last two digits (##) change. To see what they are, plug Pi into monitor and keyboard (before booting) and run `$ ip addr show`. If the ip address has changed you also need to change the ROS_MASTER_URI using `nano .bashrc` 
 
 
 To drive the robot using logitech controller with blue tape on back:
