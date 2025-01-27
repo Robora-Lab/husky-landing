@@ -39,7 +39,7 @@ To drive the robot using logitech controller with blue tape on back:
   Orange switch on deck controls power to landing pad. It performs start-up animation.
   Vicon system has to be powered on with its computer connected to lab wifi and WillHusky selected in the vicon tracker software for the platform to respond to the wave model.
   If you can't see the Husky driving around in the Vicon software then it won't work. If you've never used the Vicon system before, ask to get help.
-  The red "B" button on the Logitech controller functions as an e-stop. This will also work while using MPC.
+  The red "B" button on the Logitech controller functions as an e-stop. This will also work while using MPC. If the pose of the husky is not showing up the ip address of the vicon computer may have changed. You need to change the ip address of the vrpn server in `will_vicon.launch`. Get there using `roscd vrpn_client_ros/launch` and `nano will_vicon.launch`.
 
 To drive the robot using MPC:
   Tutorial used:
