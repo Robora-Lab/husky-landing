@@ -11,7 +11,7 @@ Emergency Email: willst3wart@gmail.com
 Revisons/Additions 01/27/25 JS
 
 Github:
-https://github.com/Robora-Lab/husky_landing
+https://github.com/Robora-Lab/husky-landing
 
 System:
   ROS 1 Noetic
